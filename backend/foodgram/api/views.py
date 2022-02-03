@@ -1,3 +1,4 @@
+from django.db.models import Sum
 from django.http.response import HttpResponse
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework import status, viewsets
@@ -218,30 +219,18 @@ class RecipeViewSet(viewsets.ModelViewSet):
         permission_classes=[IsAuthenticated],
     )
     def download_shopping_cart(self, request):
-        cart = request.user.cart.all()
-        buylist = {}
         text = 'List of ingredients for your recipes:\n\n'
-        for item in cart:
-            recipe = item.recipe
-            ingredients_list = IngredientForRecipe.objects.filter(
-                recipe=recipe
-            )
-            for ingredient in ingredients_list:
-                name = ingredient.ingredient.name
-                measurement_unit = ingredient.ingredient.measurement_unit
-                amount = ingredient.amount
-                if name not in buylist:
-                    buylist[name] = {
-                        'amount': amount,
-                        'measurement_unit': measurement_unit
-                    }
-                else:
-                    buylist[name]['amount'] += amount
-        for ingredient in buylist:
-            text += (
-                f"{ingredient} ({buylist[ingredient]['measurement_unit']}) — "
-                f"{buylist[ingredient]['amount']}\n"
-            )
+        ingredients = IngredientForRecipe.objects.filter(
+            recipe__cart__user=request.user
+        ).values('ingredient__name', 'ingredient__measurement_unit').annotate(
+            amount=Sum("amount")
+        )
+
+        text += '\n'.join([
+            f'{ingredient["ingredient__name"]} '
+            f'({ingredient["ingredient__measurement_unit"]}) — '
+            f'{ingredient["amount"]}\n' for ingredient in ingredients
+        ])
         response = HttpResponse(text, content_type='text/plain')
         response['Content-Disposition'] = (
             'attachment; filename="shopping_list.txt"'

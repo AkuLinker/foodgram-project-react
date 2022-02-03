@@ -72,12 +72,14 @@ WSGI_APPLICATION = 'foodgram.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/4.0/ref/settings/#databases
 
-# На первом этапе оставил sqlite
-# Если нужно исправить прямо сейчас на postgresql - сделаю, а так подумал, что логичнее будет уже вместе с контейнерами настраивать во втором этапе.
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': config('DB_ENGINE', default='django.db.backends.postgresql'),
+        'NAME': config('DB_NAME', default='postgres'),
+        'USER': config('POSTGRES_USER', default='postgres'),
+        'PASSWORD': config('POSTGRES_PASSWORD', default='postgres'),
+        'HOST': config('DB_HOST', default='db'),
+        'PORT': config('DB_PORT', default='5432')
     }
 }
 
@@ -116,13 +118,13 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.0/howto/static-files/
 
-STATIC_URL = '/static/'
-STATICFILES_DIRS = (BASE_DIR / 'static/', )
+STATIC_URL = '/backend_static/'
+STATIC_ROOT = BASE_DIR / 'backend_static/'
 
 # Media files (Images and etc)
 
-MEDIA_URL = '/media/'
-MEDIA_ROOT = BASE_DIR / 'media'
+MEDIA_URL = '/backend_media/'
+MEDIA_ROOT = BASE_DIR / 'backend_media'
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.0/ref/settings/#default-auto-field

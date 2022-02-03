@@ -8,6 +8,10 @@
 - Django
 - Django REST framework
 - Docker
+### Для запуска в папке /infa нужно выполнить
+```
+docker compose up
+```
 ### После запуска проекта нужно выполнить
 ```
 docker-compose exec backend python manage.py migrate

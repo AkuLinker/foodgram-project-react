@@ -47,7 +47,7 @@ class UserViewSet(viewsets.ModelViewSet):
             print(request.data)
             if not user.check_password(request.data.get('current_password')):
                 return Response(
-                    {'current_password': ['Wrong password.']},
+                    {'current_password': ['Неправильный пароль.']},
                     status=status.HTTP_400_BAD_REQUEST
                 )
             user.set_password(request.data.get('new_password'))
@@ -83,8 +83,8 @@ class UserViewSet(viewsets.ModelViewSet):
                 return Response(
                     {
                         'errors': (
-                            'you\'re already subscribed to this user '
-                            'or you\'re trying to subscribe to yourself.'
+                            'Вы уже подписаны на этого пользователя '
+                            'или пытаетесь подписаться на самого себя.'
                         )
                     },
                     status=status.HTTP_400_BAD_REQUEST
@@ -101,13 +101,13 @@ class UserViewSet(viewsets.ModelViewSet):
             subscription.delete()
             return Response(
                 {
-                    'success': 'you\'re successfully unsubscribed from user'
+                    'success': 'Вы успешно отписались от этого пользователя'
                 },
                 status=status.HTTP_204_NO_CONTENT
             )
         return Response(
                     {
-                        'errors': 'you\'ve no subscription to this user'
+                        'errors': 'Вы не подписаны на этого пользователя'
                     },
                     status=status.HTTP_400_BAD_REQUEST,
                 )
@@ -147,7 +147,7 @@ class RecipeViewSet(viewsets.ModelViewSet):
             if favorite.exists():
                 return Response(
                     {
-                        'errors': 'The recipe is already in your favorite list'
+                        'errors': 'Этот рецепт уже у Вас в избранном'
                     },
                     status=status.HTTP_400_BAD_REQUEST
                 )
@@ -162,14 +162,14 @@ class RecipeViewSet(viewsets.ModelViewSet):
         if not favorite.exists():
             return Response(
                 {
-                    'errors': 'The recipe is not in your favorite list'
+                    'errors': 'Этого рецепта нет у Вас в избранном'
                 },
                 status=status.HTTP_400_BAD_REQUEST,
             )
         favorite.delete()
         return Response(
             {
-                'success': 'The recipe successfully deleted from favorite list'
+                'success': 'Рецепт успешно удалён из избранного'
             },
             status=status.HTTP_204_NO_CONTENT
         )
@@ -186,7 +186,7 @@ class RecipeViewSet(viewsets.ModelViewSet):
             if cart.exists():
                 return Response(
                     {
-                        'errors': 'The recipe is already in your cart'
+                        'errors': 'Этот рецепт уже в вашей корзине'
                     },
                     status=status.HTTP_400_BAD_REQUEST
                 )
@@ -201,14 +201,14 @@ class RecipeViewSet(viewsets.ModelViewSet):
         if not cart.exists():
             return Response(
                 {
-                    'errors': 'The recipe is not in your cart'
+                    'errors': 'Этого рецепта нет у Вас в корзине'
                 },
                 status=status.HTTP_400_BAD_REQUEST,
             )
         cart.delete()
         return Response(
             {
-                'success': 'The recipe successfully deleted from cart'
+                'success': 'Рецепт успешно удалён из корзины'
             },
             status=status.HTTP_204_NO_CONTENT
         )
@@ -219,7 +219,7 @@ class RecipeViewSet(viewsets.ModelViewSet):
         permission_classes=[IsAuthenticated],
     )
     def download_shopping_cart(self, request):
-        text = 'List of ingredients for your recipes:\n\n'
+        text = 'Список ингредиентов для ваших рецептов:\n\n'
         ingredients = IngredientForRecipe.objects.filter(
             recipe__cart__user=request.user
         ).values('ingredient__name', 'ingredient__measurement_unit').annotate(

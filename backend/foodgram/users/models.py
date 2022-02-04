@@ -9,21 +9,21 @@ class User(AbstractUser):
     email = models.EmailField(
         unique=True,
         max_length=254,
-        verbose_name='Email',
+        verbose_name='электроннная почта',
     )
     username = models.CharField(
         max_length=150,
         unique=True,
         validators=[username_validator],
-        verbose_name='Username',
+        verbose_name='никнейм',
     )
     first_name = models.CharField(
         max_length=150,
-        verbose_name='First name',
+        verbose_name='имя',
     )
     last_name = models.CharField(
         max_length=150,
-        verbose_name='Last name',
+        verbose_name='фамилия',
     )
 
     class Meta:
@@ -49,6 +49,9 @@ class Follow(models.Model):
     )
 
     class Meta:
+        verbose_name = 'подписка'
+        verbose_name_plural = 'подписки'
+        ordering = ['id']
         constraints = [
             models.UniqueConstraint(
                 fields=['user', 'author'], name='follow_unique'

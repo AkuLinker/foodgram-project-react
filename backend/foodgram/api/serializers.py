@@ -82,7 +82,7 @@ class FollowSerializer(serializers.ModelSerializer):
     def validate(self, data):
         if self.context['request'].user == data['author']:
             raise serializers.ValidationError(
-                'You can\'t subscribe to yourself'
+                'Нельзя подписаться на самого себя'
             )
         return data
 
@@ -111,11 +111,11 @@ class TagSerializer(serializers.ModelSerializer):
     def to_internal_value(self, id):
         if not id:
             raise serializers.ValidationError({
-                'tags': 'There must be at least one tag.'
+                'tags': 'Должен быть как минимум один тег.'
             })
         if not isinstance(id, int):
             raise serializers.ValidationError(
-                'Expected int')
+                'Должно быть число')
         return get_object_or_404(Tag, id=id)
 
 
@@ -171,7 +171,7 @@ class RecipeSerializer(serializers.ModelSerializer):
         tag_list = [tag for tag in value]
         if len(set(tag_list)) < len(tag_list):
             raise serializers.ValidationError(
-                'Can\'t be two same tags')
+                'Не может быть два одинаковых тега')
         return value
 
     @staticmethod

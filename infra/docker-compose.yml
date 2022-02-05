@@ -10,7 +10,7 @@ services:
       - ./.env
 
   backend:
-    image: akulinker/foodgram:v1.1
+    image: akulinker/foodgram:v1.2
     restart: always
     volumes:
       - static_value:/app/backend_static/

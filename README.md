@@ -24,19 +24,7 @@ docker-compose exec backend python manage.py collectstatic
 ```
 ### Для заполнения бд ингредиентами нужно выполнить
 ```
-docker-compose exec backend python manage.py shell
-```
-```
-from recipes.models import Ingredient
-```
-```
-from recipes.ingredients_import import import_ingredient
-```
-```
-import_ingredient('./recipes/ingredients.json', Ingredient)
-```
-```
-exit()
+docker-compose exec backend python manage.py load_ingredients
 ```
 ### Автор
 - [Иван](https://github.com/AkuLinker/ "GitHub аккаунт")

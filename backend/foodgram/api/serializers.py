@@ -204,6 +204,8 @@ class RecipeSerializer(serializers.ModelSerializer):
         recipe_ingredients.delete()
         self.create_ingridients(ingredients, recipe)
         recipe.tags.set(tags)
+        recipe.image = validated_data.get('image')
+        recipe.save()
         return recipe
 
 

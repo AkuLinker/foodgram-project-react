@@ -112,7 +112,7 @@ class IngredientForRecipe(models.Model):
         default=1,
         validators=(
             MinValueValidator(
-                1, 'Amount can\'t be less than 1'
+                1, 'Количество не может быть меньше одного'
             ),
         ),
         verbose_name='количество',
